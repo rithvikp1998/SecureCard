@@ -1,16 +1,18 @@
-const http = require('http');
+'use strict'
+
+const express = require('express');
 const config = require('./config/config');
 const env = process.env.NODE_ENV || 'development';
 
-const hostname = config.server[env].hostname;
+console.log('Running in %s environment', env);
+
+const app = express();
 const port = config.server[env].port;
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
+app.listen(port, () => {
+  console.log('Server listening on port %s', port);
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+app.get('/', (req, res) => {
+  res.send('Hello World!');
 });
