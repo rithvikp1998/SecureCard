@@ -11,6 +11,9 @@
         "type": "git",
         "url": "https://github.com/rithvikp1998/SecureCard"
     },
-    "dependencies": {},
+    "dependencies": {
+        "express": "^4.16.4",
+        "mongodb": "^3.1.10"
+    },
     "devDependencies": {}
 }
