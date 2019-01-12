@@ -1,6 +1,9 @@
 # Temporary
 package-lock.json
 
+# Ignore db data
+data/
+
 # Logs
 logs
 *.log
