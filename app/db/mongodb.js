@@ -1,18 +1,20 @@
 'use strict'
 
 const mongodb = {
-    usernameAvailable: function(username){
+    usernameAvailable: function(username, callback){
         // Check if the username already exists
-        return 1;
+        callback(null, 1);
     },
 
-    fetchPassword: function(username){
+    fetchPassword: function(username, callback){
         // Get the password that is stored for this username
+        callback(null, null);
     },
 
-    addUser: function(username, password, clientSideSalt, serverSideSalt){
+    addUser: function(username, password, clientSideSalt, serverSideSalt, callback){
         // Store the user's username, double-hashed password and the
         // salts used while hashing the password
+        callback(null, null);
     }
 };
 

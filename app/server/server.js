@@ -8,9 +8,12 @@ const api = function(io){
 
         socket.on('getSalt', (data) => {
             console.log('Get salt called for username', data.username);
-            var salt = auth.getSalt(data.username);
-            console.log('Salt generated for ' + data.username + ' : ' + salt);
-            socket.emit('clientSideSalt', {salt: salt});
+            auth.getSalt(data.username, (err, salt) => {
+                if (err == null) {
+                    console.log('Salt generated for ' + data.username + ' : ' + salt);
+                    socket.emit('clientSideSalt', {salt: salt});
+                }
+            });
         });
     });
 }

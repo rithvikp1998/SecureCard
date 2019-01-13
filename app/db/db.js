@@ -4,14 +4,20 @@ const dbModuleType = process.env.DATABASE_TYPE || 'mongodb';
 const dbModule = require('./' + dbModuleType);
 
 const db = {
-    usernameAvailable: function(username){
-        return dbModule.usernameAvailable(username);
+    usernameAvailable: function(username, callback){
+        dbModule.usernameAvailable(username, (err, result) => {
+            callback(err, result);
+        });
     },
-    fetchPassword: function(username){
-        return dbModule.fetchPassword(username);
+    fetchPassword: function(username, callback){
+        dbModule.fetchPassword(username, (err, result) => {
+            callback(err, result);
+        });
     },
-    addUser: function(username){
-        return dbModule.addUser(username, password, clientSideSalt, serverSideSalt);
+    addUser: function(username, password, clientSideSalt, serverSideSalt, callback){
+        dbModule.addUser(username, password, clientSideSalt, serverSideSalt, (err, result) => {
+            callback(err, result);
+        });
     }
 };
 

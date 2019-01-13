@@ -7,47 +7,48 @@ const authConfig = require('../../config/authConfig');
 const env = process.env.NODE_ENV || 'development';
 
 const auth = {
-    getSalt: function(username){
-        if (!db.usernameAvailable(username)){
-            return 'usernameTaken';
-        }
-        else {
-            return createSalt(); // To hash password on the client side
-        }
+    getSalt: function(username, callback){
+        db.usernameAvailable(username, (err, result) => {
+            if (err == null && result == 1){
+                createSalt((err, salt) => {
+                    if (err == null) {
+                        callback(null, salt);
+                    }
+                })
+            }
+        });
     },
 
-    registerUser: function(username, password){
-        if (!db.usernameAvailable(username)){
-            return 'usernameTaken';
-        }
-        else {
-            // Hash again on server side
-            // Store in db
-            console.log('User registered successfully');
-            return 'userRegistered';
-        }
+    registerUser: function(username, password, callback){
+        db.usernameAvailable(username, (err, result) => {
+            if (err == null && result == 1){
+                // Hash again on server side
+                // Store in db
+                console.log('User registered successfully');
+                callback(null, 'userRegistered');
+            }
+        });
     },
 
-    validateUser: function(username, password){
-        if (db.usernameAvailable(username)){
-            return 'usernameNotFound';
-        }
-        else {
-            if (passwordValid(username, password)){
-                // Generate a cookie
-                console.log('User logged in successfully');
-                return 'userLoggedIn';
+    validateUser: function(username, password, callback){
+        db.usernameAvailable(username, (err, result) => {
+            if (err == null && result == 1){
+                passwordValid(username, password, (err, result) => {
+                    // Generate a cookie
+                    console.log('User logged in successfully');
+                    callback(null, 'userLoggedIn');
+                });
             }
-            else {
-                return 'incorrectPassword';
-            }
-        }
+        });
     }
 };
 
-function createSalt(){
-    // TODO: Use async functions
-    return bcrypt.genSaltSync(authConfig[env].saltRounds); 
+function createSalt(callback){
+    bcrypt.genSalt(authConfig[env].saltRounds, (err, salt) => {
+        if (err == null) {
+            callback(null, salt);
+        }
+    }); 
 }
 
 module.exports = auth
