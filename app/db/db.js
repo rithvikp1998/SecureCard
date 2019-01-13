@@ -14,9 +14,9 @@ const db = {
             callback(err, result);
         });
     },
-    addUser: function(username, password, clientSideSalt, serverSideSalt, callback){
-        dbModule.addUser(username, password, clientSideSalt, serverSideSalt, (err, result) => {
-            callback(err, result);
+    registerUser: function(username, password, clientSideSalt, serverSideSalt, callback){
+        dbModule.registerUser(username, password, clientSideSalt, serverSideSalt, (err) => {
+            callback(err);
         });
     }
 };

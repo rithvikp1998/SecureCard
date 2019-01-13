@@ -26,13 +26,40 @@
     var socket = io.connect('http://localhost:4000');
     socket.on('connect', () => {
         console.log('Connected to socket.io server with socket', socket.id);
-
-        socket.emit('getSalt', {'username': 'random'});
     });
+
+    function registerUser(){
+        var username = document.getElementById('register-username').value;
+        socket.emit('getSalt', {'username': username});
+    }
 
     socket.on('clientSideSalt', (data) => {
         console.log('Client received the salt:', data.salt);
+        hashPassword(data.salt, (err, hash) => {
+            if (err == null){
+                socket.emit('registerUser', {'username': data.username, 'salt': data.salt, 'hash': hash});
+            }
+        });
     });
+
+    function hashPassword(salt, callback){
+        var password = document.getElementById('register-password').value;
+        var confirm_password = document.getElementById('register-confirm-password').value;
+        if (password !== confirm_password){
+            console.log("Password doesn't match confirm-password");
+            return;
+        }
+        
+        var encoder = new TextEncoder(); // always utf-8
+        var decoder = new TextDecoder('utf-8');
+
+        // Salt keeps the hash unique and helps against rainbow table attacks.
+        // TODO: Need stronger algo?
+        var promise = crypto.subtle.digest('SHA-512', encoder.encode(password + salt)); 
+        promise.then((digest) => {
+            callback(null, decoder.decode(digest)); // digest is an ArrayBuffer
+        });
+    }
 
 </script>
 

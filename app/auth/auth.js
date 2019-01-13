@@ -19,13 +19,19 @@ const auth = {
         });
     },
 
-    registerUser: function(username, password, callback){
+    registerUser: function(username, password, clientSideSalt, callback){
         db.usernameAvailable(username, (err, result) => {
             if (err == null && result == 1){
-                // Hash again on server side
-                // Store in db
-                console.log('User registered successfully');
-                callback(null, 'userRegistered');
+                hashPassword(password, (err, hash, serverSidesalt) => {
+                    if(err == null){
+                        db.registerUser(username, hash, clientSideSalt, serverSidesalt, (err) => {
+                            if (err == null){
+                                console.log("User '%s' registration data written to db", username);
+                                callback(null);
+                            }
+                        });
+                    }
+                });
             }
         });
     },
@@ -49,6 +55,18 @@ function createSalt(callback){
             callback(null, salt);
         }
     }); 
+}
+
+function hashPassword(password, callback){
+    bcrypt.genSalt(authConfig[env].saltRounds, function(err, salt) {
+        if (err == null){
+            bcrypt.hash(password, salt, function(err, hash) {
+                if (err == null){
+                    callback(null, hash, salt);
+                }
+            });
+        }
+    });
 }
 
 module.exports = auth

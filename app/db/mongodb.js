@@ -11,10 +11,10 @@ const mongodb = {
         callback(null, null);
     },
 
-    addUser: function(username, password, clientSideSalt, serverSideSalt, callback){
+    registerUser: function(username, password, clientSideSalt, serverSideSalt, callback){
         // Store the user's username, double-hashed password and the
         // salts used while hashing the password
-        callback(null, null);
+        callback(null);
     }
 };
 
