@@ -6,6 +6,11 @@ const mongodb = {
         callback(null, 1);
     },
 
+    fetchSalt: function(username, callback){
+        // Get the clientSide salt for the username
+        callback(null, 'someSalt');
+    },
+
     fetchPassword: function(username, callback){
         // Get the password that is stored for this username
         callback(null, null);

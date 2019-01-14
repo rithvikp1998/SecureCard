@@ -9,6 +9,11 @@ const db = {
             callback(err, result);
         });
     },
+    fetchSalt: function(username, callback){
+        dbModule.fetchSalt(username, (err, result) => {
+            callback(err, result);
+        })
+    },
     fetchPassword: function(username, callback){
         dbModule.fetchPassword(username, (err, result) => {
             callback(err, result);

@@ -7,7 +7,7 @@ const authConfig = require('../../config/authConfig');
 const env = process.env.NODE_ENV || 'development';
 
 const auth = {
-    getSalt: function(username, callback){
+    generateNewSalt: function(username, callback){
         db.usernameAvailable(username, (err, result) => {
             if (err == null && result == 1){
                 createSalt((err, salt) => {
@@ -36,13 +36,24 @@ const auth = {
         });
     },
 
+    getSalt: function(username, callback){
+        db.fetchSalt(username, (err, result) => {
+            if(err == null){
+                callback(null, result);
+            }
+        });
+    },
+
     validateUser: function(username, password, callback){
         db.usernameAvailable(username, (err, result) => {
-            if (err == null && result == 1){
+            result = 0; // Until db methods are implemented
+            if (err == null && result == 0){
                 passwordValid(username, password, (err, result) => {
-                    // Generate a cookie
-                    console.log('User logged in successfully');
-                    callback(null, 'userLoggedIn');
+                    if(err == null && result == 1){
+                        // Generate a cookie
+                        console.log('User logged in successfully');
+                        callback(null, 1);
+                    }
                 });
             }
         });
@@ -67,6 +78,17 @@ function hashPassword(password, callback){
             });
         }
     });
+}
+
+function passwordValid(username, password, callback){
+    db.fetchPassword(username, (err, result) => {
+        bcrypt.compare(password, result, (err, same) => {
+            if(err == null && same == 1){
+                callback(null, 1);
+            }
+            callback(null, 1); // Until db methods are implemented
+        });
+    })
 }
 
 module.exports = auth

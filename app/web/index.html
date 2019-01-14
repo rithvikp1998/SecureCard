@@ -30,26 +30,25 @@
 
     function registerUser(){
         var username = document.getElementById('register-username').value;
-        socket.emit('getSalt', {'username': username});
+        socket.emit('getNewSalt', {'username': username});
     }
 
-    socket.on('clientSideSalt', (data) => {
+    socket.on('newClientSideSalt', (data) => {
         console.log('Client received the salt:', data.salt);
-        hashPassword(data.salt, (err, hash) => {
-            if (err == null){
-                socket.emit('registerUser', {'username': data.username, 'salt': data.salt, 'hash': hash});
-            }
-        });
-    });
-
-    function hashPassword(salt, callback){
         var password = document.getElementById('register-password').value;
         var confirm_password = document.getElementById('register-confirm-password').value;
         if (password !== confirm_password){
             console.log("Password doesn't match confirm-password");
             return;
         }
-        
+        hashPassword(password, data.salt, (err, hash) => {
+            if (err == null){
+                socket.emit('registerUser', {'username': data.username, 'salt': data.salt, 'hash': hash});
+            }
+        });
+    });
+
+    function hashPassword(password, salt, callback){
         var encoder = new TextEncoder(); // always utf-8
         var decoder = new TextDecoder('utf-8');
 
@@ -60,6 +59,21 @@
             callback(null, decoder.decode(digest)); // digest is an ArrayBuffer
         });
     }
+
+    function loginUser(){
+        var username = document.getElementById('register-username').value;
+        socket.emit('getSalt', {'username': username});
+    }
+
+    socket.on('clientSideSalt', (data) => {
+        console.log('Client received the salt:', data.salt);
+        var password = document.getElementById('login-password').value;
+        hashPassword(password, data.salt, (err, hash) => {
+            if (err == null){
+                socket.emit('loginUser', {'username': data.username, 'salt': data.salt, 'hash': hash});
+            }
+        });
+    });
 
 </script>
 
