@@ -61,7 +61,7 @@
     }
 
     function loginUser(){
-        var username = document.getElementById('register-username').value;
+        var username = document.getElementById('login-username').value;
         socket.emit('getSalt', {'username': username});
     }
 

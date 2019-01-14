@@ -86,7 +86,6 @@ function passwordValid(username, password, callback){
             if(err == null && same == 1){
                 callback(null, 1);
             }
-            callback(null, 1); // Until db methods are implemented
         });
     })
 }

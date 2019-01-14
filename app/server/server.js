@@ -17,8 +17,7 @@ const api = function(io){
         });
 
         socket.on('registerUser', (data) => {
-            console.log('Registering user %s with client-side salt %s and password hash %s',
-            data.username, data.salt, data.hash);
+            console.log('Registering user', data.username);
             auth.registerUser(data.username, data.hash, data.salt, (err) => {
                 if (err == null){
                     console.log("User '%s' registered successfully", data.username);
@@ -38,9 +37,8 @@ const api = function(io){
         });
 
         socket.on('loginUser', (data) => {
-            console.log('Logging in user %s with client-side salt %s and password hash %s',
-            data.username, data.salt, data.hash);
-            auth.validateUser(data.username, data.password, (err, result) => {
+            console.log('Logging in user', data.username);
+            auth.validateUser(data.username, data.hash, (err, result) => {
                 if(err == null && result == 1){
                     console.log('User %s logged in successfully', data.username);
                     // Redirect user
