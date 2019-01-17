@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>SecureCard - Home</title>
+    <title>SecureCard - Login</title>
     <meta charset="utf-8">
 </head>
 <body>
@@ -73,6 +73,14 @@
                 socket.emit('loginUser', {'username': data.username, 'salt': data.salt, 'hash': hash});
             }
         });
+    });
+
+    socket.on('redirectDashboard', (data) => {
+        console.log('Closing socket io connection');
+        socket.disconnect(); // TODO: Is this correct?
+        console.log(socket.disconnected); // 'true'
+        console.log('Redirecting to dashboard');
+        window.location = 'dashboard.html';
     });
 
 </script>

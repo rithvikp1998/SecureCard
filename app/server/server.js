@@ -21,7 +21,7 @@ const api = function(io){
             auth.registerUser(data.username, data.hash, data.salt, (err) => {
                 if (err == null){
                     console.log("User '%s' registered successfully", data.username);
-                    // Redirect user
+                    socket.emit('redirectDashboard');
                 }
             });
         });
@@ -41,7 +41,7 @@ const api = function(io){
             auth.validateUser(data.username, data.hash, (err, result) => {
                 if(err == null && result == 1){
                     console.log('User %s logged in successfully', data.username);
-                    // Redirect user
+                    socket.emit('redirectDashboard');
                 }
             });
         });
