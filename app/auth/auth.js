@@ -46,7 +46,6 @@ const auth = {
 
     validateUser: function(username, password, callback){
         db.usernameAvailable(username, (err, result) => {
-            result = 0; // Until db methods are implemented
             if (err == null && result == 0){
                 passwordValid(username, password, (err, result) => {
                     if(err == null && result == 1){
