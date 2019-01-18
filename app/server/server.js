@@ -16,7 +16,7 @@ const api = function(io){
             });
         });
 
-        socket.on('registerUser', (data) => {
+        /*socket.on('registerUser', (data) => {
             console.log('Registering user', data.username);
             auth.registerUser(data.username, data.hash, data.salt, (err) => {
                 if (err == null){
@@ -24,7 +24,7 @@ const api = function(io){
                     socket.emit('redirectDashboard');
                 }
             });
-        });
+        });*/
 
         socket.on('getSalt', (data) => {
             console.log('Get salt called for username', data.username);
@@ -36,7 +36,7 @@ const api = function(io){
             });
         });
 
-        socket.on('loginUser', (data) => {
+        /*socket.on('loginUser', (data) => {
             console.log('Logging in user', data.username);
             auth.validateUser(data.username, data.hash, (err, result) => {
                 if(err == null && result == 1){
@@ -44,7 +44,7 @@ const api = function(io){
                     socket.emit('redirectDashboard');
                 }
             });
-        });
+        });*/
     });
 }
 

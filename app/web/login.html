@@ -21,6 +21,11 @@
     </div>
 </body>
 
+<script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous">
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 <script>
     var socket = io.connect('http://localhost:4000');
@@ -43,7 +48,19 @@
         }
         hashPassword(password, data.salt, (err, hash) => {
             if (err == null){
-                socket.emit('registerUser', {'username': data.username, 'salt': data.salt, 'hash': hash});
+                $.ajax({
+                    url: '/register',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    success: function(data){
+                        window.location = 'dashboard.html';
+                    },
+                    data: JSON.stringify({
+                        username: data.username,
+                        password: hash,
+                        salt: data.salt
+                    })}
+                );
             }
         });
     });
@@ -70,7 +87,20 @@
         var password = document.getElementById('login-password').value;
         hashPassword(password, data.salt, (err, hash) => {
             if (err == null){
-                socket.emit('loginUser', {'username': data.username, 'salt': data.salt, 'hash': hash});
+                //socket.emit('loginUser', {'username': data.username, 'salt': data.salt, 'hash': hash});
+                $.ajax({
+                    url: '/login',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    success: function(data){
+                        window.location = 'dashboard.html';
+                    },
+                    data: JSON.stringify({
+                        username: data.username,
+                        password: hash,
+                        salt: data.salt
+                    })}
+                );
             }
         });
     });
